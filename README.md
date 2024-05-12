@@ -64,11 +64,9 @@ Please refer to the following sections for instructions on how to install and us
 
     Open your web browser and go to `http://localhost:5000`.
 
-### Usage
+## Deployed Application
 
-1. Upload an image containing products you want to compare prices for.
-2. Wait for the application to process the image and retrieve prices from e-commerce websites.
-3. View the comparison results displayed on the web page.
+The live site for this application is accessible [here](https://price-comparison-site-3.onrender.com).
 
 ## Contributing
 
