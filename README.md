@@ -1,4 +1,4 @@
-# Price Comparison Web Application
+# Visual Price Comparison Web Application
 
 This Flask web application allows users to compare prices of products detected in images using the Google Cloud Vision API. Users can upload an image, and the application will extract URLs related to e-commerce sites and their corresponding prices.
 
