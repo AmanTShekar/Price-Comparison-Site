@@ -3,136 +3,210 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visual Price Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>VISUAL PRICE CHECKER</title>
 
-  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='img/thumbnail.jpg') }}" rel="apple-touch-icon">
+  <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <style>
-    body.no-scroll { overflow: hidden; }
-    .content-blurred { filter: blur(5px); }
-
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
       z-index: 1000;
       justify-content: center;
       align-items: center;
     }
 
-    .modal-show { display: flex; }
+    .modal-show {
+      display: flex;
+    }
 
     .modal-content {
-      background: white;
-      max-width: 600px;
-      width: 90%;
-      padding: 20px;
-      border-radius: 10px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 30px;
+      width: 500px;
+      max-width: 90%;
+      text-align: center;
       position: relative;
     }
 
-    .modal-close {
+    .upload-close {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      border: none;
+      top: 15px;
+      right: 15px;
       background: none;
+      border: none;
       font-size: 1.2rem;
       cursor: pointer;
+      color: #333;
     }
 
+    .about-font {
+      font-family: "Montserrat", sans-serif;
+      font-weight: bold;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .about-container {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      padding: 20px;
+      text-align: left;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .content-blurred {
+      filter: blur(5px);
+    }
+
+    /* Compare button */
     #redirect-btn {
-      display: none;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #28a745;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #007bff;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       color: white;
       font-size: 1rem;
       cursor: pointer;
     }
 
-    #loading-overlay {
-      display: none;
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 2rem;
+    #note {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #555;
     }
   </style>
 </head>
 
 <body>
 
-<div id="loading-overlay">Uploading...</div>
+  <!-- Upload Modal -->
+  <div class="modal upload-modal">
+    <div class="modal-content">
+      <button type="button" class="upload-close"><i class="fas fa-times"></i></button>
+      <h2>Upload an Image</h2>
+      <form action="/upload" class="dropzone" id="my-dropzone"></form>
 
-<!-- Upload Modal -->
-<div class="modal upload-modal">
-  <div class="modal-content">
-    <button type="button" class="modal-close upload-close"><i class="fas fa-times"></i></button>
-    <h2>Upload Image</h2>
-    <form action="/upload" class="dropzone" id="my-dropzone" enctype="multipart/form-data"></form>
-    <button id="redirect-btn" onclick="window.location.href='/compare.html'">View Comparison Results</button>
+      <!-- Always visible compare button -->
+      <button id="redirect-btn" onclick="window.location.href='/compare.html'">
+        View Comparison Results
+      </button>
+      <div id="note">⚠️ Click only after upload completes</div>
+    </div>
   </div>
-</div>
 
-<!-- Main Content -->
-<div class="content">
-  <h1>Visual Price Checker</h1>
-  <button class="button modal-toggle">UPLOAD</button>
-</div>
+  <!-- About Modal -->
+  <div class="modal about-modal">
+    <div class="modal-content">
+      <button type="button" class="modal-close about-close"><i class="fas fa-times"></i></button>
+      <div class="about-font">About Visual Price Checker</div>
+      <div class="about-container">
+        <p>Visual Price Checker is a smart tool designed to help users find the best deals online.
+          By leveraging advanced image recognition and cloud vision technology, it allows you to compare prices effortlessly and save time.</p>
+        <p>Our mission is to make shopping smarter, easier, and more transparent.
+          We focus on accuracy, efficiency, and simplicity so you can enjoy a hassle-free price comparison experience.</p>
+        <p>This project was built as a mini project to demonstrate the power of modern web technologies
+          like Flask, Dropzone.js, and Cloud Vision API. We aim to continually improve and innovate for a seamless user experience.</p>
+        <p>Thank you for exploring Visual Price Checker.
+          Start uploading images and let us do the legwork for you – compare, save, and shop smart.</p>
+      </div>
+    </div>
+  </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-<script>
-$(document).ready(function () {
+  <!-- Main Content -->
+  <div class="content">
+    <a href="index.html" class="logo"><img src="{{ url_for('static', filename='img/logodo.png') }}" alt="logo" /></a>
+    <div class="hero">
+      <h1 class="title">Visual Price Checker</h1>
+      <h1 class="title shift clip">
+        <span class="word-shift">
+          <b class="is-visible">Helps U Find The Best Deals.&nbsp;</b>
+          <b>Find the best deals without the hassle. Let us do the legwork for you.</b>
+          <b>Shop smart, save smarter. Start comparing prices today</b>
+        </span>
+      </h1>
+      <button class="button modal-toggle">UPLOAD</button>
+      <a href="#" class="button white about-modal-toggle">About</a>
+      <p class="subtitle">Powered By Cloud Vision API <img src="{{ url_for('static', filename='img/logo-google.png') }}" alt="google" /></p>
+    </div>
+    <div class="screen-wrapper">
+      <img src="{{ url_for('static', filename='img/screen.png') }}" class="screen" alt="screen" />
+    </div>
+  </div>
 
-  function toggleModal(modalClass) {
-    $(modalClass).toggleClass('modal-show');
-    $('.content').toggleClass('content-blurred');
-    $('body').toggleClass('no-scroll');
-  }
+  <script src="{{ url_for('static', filename='js/jquery/3.4.1/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/scripts.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      feather.replace();
 
-  $('.modal-toggle').click(function(){ toggleModal('.upload-modal'); });
-  $('.upload-close').click(function(){ toggleModal('.upload-modal'); });
-  $(document).keyup(function(e){ if(e.key === "Escape"){ toggleModal('.upload-modal'); }});
+      function toggleModal(modalClass) {
+        $(modalClass).toggleClass('modal-show');
+        $('.content').toggleClass('content-blurred');
+        $('body').toggleClass('no-scroll');
+      }
 
-  // Dropzone
-  var myDropzone = new Dropzone("#my-dropzone", {
-    paramName: "file",
-    maxFiles: 1,
-    maxFilesize: 5, // MB
-    acceptedFiles: "image/*",
-    addRemoveLinks: true,
-    dictDefaultMessage: "Drag an image here or click to upload",
-    init: function() {
-      this.on("sending", function() { $("#loading-overlay").show(); });
-      this.on("success", function(file, response){
-        $("#loading-overlay").hide();
-        console.log("Server response:", response);
-        if(response.status === "success"){
-          $("#redirect-btn").show();
-          alert("Upload complete! Click 'View Comparison Results' to continue.");
-        } else {
-          alert("Upload failed: " + response.message);
+      $('.about-modal-toggle').click(function (e) {
+        e.preventDefault();
+        toggleModal('.about-modal');
+      });
+      $('.about-close').click(function () {
+        toggleModal('.about-modal');
+      });
+
+      $('.modal-toggle').click(function (e) {
+        e.preventDefault();
+        toggleModal('.upload-modal');
+      });
+      $('.upload-close').click(function () {
+        toggleModal('.upload-modal');
+      });
+
+      $(document).keyup(function (e) {
+        if (e.key === "Escape") {
+          $('.modal').removeClass('modal-show');
+          $('.content').removeClass('content-blurred');
+          $('body').removeClass('no-scroll');
         }
       });
-      this.on("error", function(file, err){ $("#loading-overlay").hide(); alert("Upload failed: " + err); });
-    }
-  });
 
-});
-</script>
+      // Dropzone
+      var myDropzone = new Dropzone("#my-dropzone", {
+        maxFiles: 1,
+        maxFilesize: 5,
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        dictDefaultMessage: "Drag an image here or click to upload",
+        init: function () {
+          this.on("success", function (file, response) {
+            console.log("Upload success:", response);
+            document.getElementById("note").innerText = "✅ Upload completed. Now click Compare Results.";
+          });
+          this.on("error", function (file, errorMessage) {
+            document.getElementById("note").innerText = "❌ Upload failed. Try again.";
+          });
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
