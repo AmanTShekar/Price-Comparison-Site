@@ -13,9 +13,7 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "local_secret_key")
 
 # ---------- GOOGLE CLOUD VISION ----------
 # Path to credentials (Render secret file or local json)
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv(
-    "GOOGLE_APPLICATION_CREDENTIALS", "google-credentials.json"
-)
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/etc/secrets/google-credentials.json"
 
 # ---------- SCRAPER API ----------
 SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY")
