@@ -1,102 +1,154 @@
 # Visual Price Comparison Web Application
 
-This Flask web application allows users to compare prices of products detected in images using the Google Cloud Vision API. Users can upload an image, and the application will extract URLs related to e-commerce sites and their corresponding prices.
+This Flask web application allows users to compare prices of products detected in images using the **Google Cloud Vision API**.  
+Users upload an image, and the app extracts related e-commerce URLs and their corresponding prices.
 
-#### it's still under development and not completely working on deployed server due to some issues.But it Works Properly on local host So try It
+🚧 **Note:** The app works **perfectly on localhost**. The Render deployment is experimental and may have limitations (session handling & file uploads).  
 
-## Deployed Application
+---
 
-The live site for this application is accessible [here](https://price-comparison-site-3.onrender.com).
+## 🔗 Live Demo
 
-## Features
+👉 [Deployed Application on Render](https://price-comparison-site-1.onrender.com)  
+*(If it doesn’t load correctly, please run locally using the steps below.)*
 
-- **Image Upload:** Users can upload an image containing products they want to compare prices for.
-- **Google Cloud Vision Integration:** Utilizes the Google Cloud Vision API to detect web entities in the uploaded image.
-- **Price Scraping:** Scrapes prices from various e-commerce websites corresponding to the detected products.
-- **Comparison Display:** Presents a comparison of prices for the detected products on the web page.
+---
 
-## How It Works
+## ✨ Features
 
-1. **Image Upload:** Users upload an image through the web interface.
-2. **Web Entity Detection:** The application processes the uploaded image using the Google Cloud Vision API to detect web entities.
-3. **Price Extraction:** Extracted URLs related to e-commerce sites are matched with predefined XPath expressions to scrape prices.
-4. **Comparison Display:** The comparison results, including product URLs and prices, are displayed on the web page for users to view.
+- 📸 **Image Upload** – Upload a product image.  
+- 🔎 **Google Vision API** – Detects web entities and product matches.  
+- 💰 **Price Scraping** – Fetches product prices from Amazon, Flipkart, Myntra, Ajio, Croma, TataCliq, etc.  
+- 📊 **Comparison View** – Displays multiple store links with their prices.  
+- ⚡ **API-Based Scraping** – Uses [ScraperAPI](https://www.scraperapi.com/) instead of local Selenium/Chrome.  
 
-## Performance
+---
 
-- **Scalability:** The application is designed to handle multiple concurrent requests and can scale with demand.
-- **Processing Time:** The processing time varies depending on the size of the uploaded image and the number of detected web entities. However, efforts have been made to optimize performance where possible.
-- **Reliability:** The application aims to provide reliable price comparison results by utilizing established web scraping techniques and the Google Cloud Vision API.
+## ⚙️ How It Works
 
-## Installation and Usage
+1. **Upload Image** – User uploads a product photo.  
+2. **Vision Detection** – Google Vision API finds best-guess labels + matching e-commerce pages.  
+3. **Scraper API** – Scrapes those URLs to extract prices.  
+4. **Comparison Display** – Results are shown side-by-side for easy comparison.  
 
-Please refer to the following sections for instructions on how to install and use the application.
+---
 
-### Installation
+## 🚀 Installation & Local Usage
 
-1. **Clone the repository:**
+### 1. Clone the Repository
 
-    ```bash
-    git clone https://github.com/your-username/your-repository.git
-    cd your-repository
-    ```
+```bash
+git clone https://github.com/your-username/your-repository.git
+cd your-repository
+```
 
-2. **Install dependencies:**
+### 2. Create a Virtual Environment (Optional but Recommended)
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+python -m venv venv
+source venv/bin/activate   # On macOS/Linux
+venv\Scripts\activate      # On Windows
+```
 
-3. **Set up environment variables:**
+### 3. Install Dependencies
 
-    - Create a `.env` file in the root directory.
-    - Define the following environment variables:
+```bash
+pip install -r requirements.txt
+```
 
-        ```plaintext
-        FLASK_SECRET_KEY=your_secret_key
-        CHROME_BINARY_LOCATION=/path/to/chrome/binary
-        CHROME_DRIVER_PATH=/path/to/chromedriver
-        GOOGLE_APPLICATION_CREDENTIALS=/path/to/google_credentials.json
-        UPLOAD_FOLDER=uploads
-        ```
+### 4. Setup Environment Variables
 
-4. **Run the application:**
+Create a `.env` file in the root directory:
 
-    ```bash
-    python app.py
-    ```
+```plaintext
+FLASK_SECRET_KEY=your_secret_key
+SCRAPER_API_KEY=your_scraperapi_key
+GOOGLE_APPLICATION_CREDENTIALS=google-credentials.json
+```
 
-5. **Access the application:**
+- `google-credentials.json` → Download from Google Cloud Console and place in the project root.  
+- `SCRAPER_API_KEY` → [Get a free ScraperAPI key](https://www.scraperapi.com/).  
 
-    Open your web browser and go to `http://localhost:5000`.
+### 5. Run Locally
 
+```bash
+python app.py
+```
 
-## Contributing
+Then open:  
+👉 `http://127.0.0.1:5000`
 
-Contributions are welcome! If you'd like to contribute to this project, please follow the steps outlined below.
+---
 
-### How to Contribute
+## 🌍 Deployment (Render)
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/new-feature`).
-3. Make your changes and commit them (`git commit -am 'Add new feature'`).
-4. Push your changes to the branch (`git push origin feature/new-feature`).
-5. Create a new Pull Request.
+If you want to deploy on Render:
 
-## License
+1. Push your code to GitHub.  
+2. Create a new **Render Web Service**.  
+3. In **Settings → Environment Variables**, add:  
+   - `FLASK_SECRET_KEY`  
+   - `SCRAPER_API_KEY`  
+   - `GOOGLE_APPLICATION_CREDENTIALS` (use Render’s **Secret File** feature).  
+4. Set **Build Command**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+5. Set **Start Command**:
+   ```bash
+   gunicorn webS:app
+   ```
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+---
 
-## Acknowledgements
+## 🛠️ Tech Stack
 
-This project relies on the following technologies and libraries:
+- **Flask** – Python backend  
+- **Google Cloud Vision API** – Product & entity detection  
+- **ScraperAPI + BeautifulSoup** – Price scraping  
+- **Bootstrap / HTML** – Frontend UI  
 
-- [Flask](https://flask.palletsprojects.com/): Web framework for Python.
-- [Google Cloud Vision API](https://cloud.google.com/vision): For web entity detection.
-- [Selenium](https://www.selenium.dev/): For web scraping.
-- [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/): For HTML parsing.
-- [Bootstrap](https://getbootstrap.com/): For front-end design.
+---
 
-## Contact
+## ⚠️ Shortcomings of Not Using Selenium
 
-For any questions or inquiries, please contact [aman.tshekar@gmail.com](mailto:aman.tshekar@gmail.com).
+Currently, the application does **not** use Selenium (headless browser automation).  
+Instead, it relies on ScraperAPI + BeautifulSoup for lightweight scraping.  
+
+### ✅ Pros:
+- Faster and more lightweight.  
+- Easier to deploy on cloud platforms (Render, Vercel).  
+- No need for Chrome/Chromedriver binaries.  
+
+### ❌ Cons:
+- Some prices may be missed if they are **rendered dynamically with JavaScript**.  
+- Certain sites with **aggressive anti-bot measures** (like dynamic classes, hidden prices) may block scraping.  
+- Selenium would give more **accurate scraping** since it renders the page like a real browser.  
+
+👉 In short: **ScraperAPI = lightweight but limited**, **Selenium = heavier but more accurate**.  
+
+---
+
+## 📌 Roadmap
+
+- [ ] Improve price scraping accuracy  
+- [ ] Add more e-commerce sites  
+- [ ] Enhance frontend UI  
+- [ ] Optional Selenium mode for more reliable scraping  
+- [ ] Optimize for cloud deployment (Render/Vercel)  
+
+---
+
+## 🙌 Acknowledgements
+
+- [Flask](https://flask.palletsprojects.com/)  
+- [Google Cloud Vision API](https://cloud.google.com/vision)  
+- [ScraperAPI](https://www.scraperapi.com/)  
+- [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/)  
+
+---
+
+## 📬 Contact
+
+For any questions, reach me at:  
+📧 [aman.tshekar@gmail.com](mailto:aman.tshekar@gmail.com)
