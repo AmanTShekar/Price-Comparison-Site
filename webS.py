@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session, jsonify, redirect
+from flask import Flask, request, render_template, session
 import os
 import requests
 from urllib.parse import urlparse, quote_plus, parse_qs
@@ -7,13 +7,18 @@ from google.cloud import vision
 import re
 
 app = Flask(__name__)
-app.secret_key = "local_secret_key"
+
+# Secret key from environment
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "local_secret_key")
 
 # ---------- GOOGLE CLOUD VISION ----------
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "google-credentials.json"
+# Path to credentials (Render secret file or local json)
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv(
+    "GOOGLE_APPLICATION_CREDENTIALS", "google-credentials.json"
+)
 
 # ---------- SCRAPER API ----------
-SCRAPER_API_KEY = "56ea1d90a496c3958f58c684918a97f5"
+SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY")
 
 # ---------- ECOMMERCE XPATHS / CLASSES ----------
 ECOMMERCE_SITES = {
@@ -151,7 +156,6 @@ def upload():
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 
-
 @app.route("/compare.html")
 def compare():
     if "results" not in session:
@@ -164,4 +168,4 @@ def compare():
 
 # ---------- RUN ----------
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
