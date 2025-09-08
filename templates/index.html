@@ -5,77 +5,131 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <title>VISUAL PRICE CHECKER</title>
-  <meta name="title" content="Doomout">
-  <meta name="description" content="A minimal email client for inbox zero enthusiasts.">
-  <meta name="keywords" content="tiny, mail, client, gmail, icloud, minimal, superhuman">
-  <meta name="author" content="@ijazulrehman">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://doomout.com/">
-  <meta property="og:title" content="Doomout">
-  <meta property="og:description" content="A minimal email client for inbox zero enthusiasts.">
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://doomout.com/">
-  <meta property="twitter:title" content="Doomout">
-  <meta property="twitter:description" content="A minimal email client for inbox zero enthusiasts.">
+
   <link href="{{ url_for('static', filename='img/thumbnail.jpg') }}" rel="apple-touch-icon">
   <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="shortcut icon">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-  <!-- Include Dropzone.js -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 30px;
+      width: 500px;
+      max-width: 90%;
+      text-align: center;
+      position: relative;
+    }
+
+    .upload-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .about-font {
+      font-family: "Montserrat", sans-serif;
+      font-weight: bold;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .about-container {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      padding: 20px;
+      text-align: left;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .content-blurred {
+      filter: blur(5px);
+    }
+
+    /* Compare button */
+    #redirect-btn {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #note {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
 </head>
 
-
 <body>
+
+  <!-- Upload Modal -->
   <div class="modal upload-modal">
-    <button type="button" class="modal-close modal-toggle"><i class="icon" data-feather="x"></i><span class="hide-mobile">ESC</span></button>
     <div class="modal-content">
-      <a href="index.html" class="logo"><img src="{{ url_for('static', filename='img/logodo.svg') }}" alt="logo" /></a>
-
+      <button type="button" class="upload-close"><i class="fas fa-times"></i></button>
+      <h2>Upload an Image</h2>
       <form action="/upload" class="dropzone" id="my-dropzone"></form>
-      <input type="file" id="file-input" style="display: none;" />
 
-
-      <!-- Include Dropzone.js -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-
-      <button type="button" class="button" onclick="redirectToCompare()">SEARCH</button>
-      <script>
-        // Function to redirect to compare.html
-        function redirectToCompare() {
-          window.location.href = "compare.html";
-        }
-      </script>
+      <!-- Always visible compare button -->
+      <button id="redirect-btn" onclick="window.location.href='/compare.html'">
+        View Comparison Results
+      </button>
+      <div id="note">⚠️ Click only after upload completes</div>
     </div>
   </div>
 
-
+  <!-- About Modal -->
   <div class="modal about-modal">
-    <button type="button" class="modal-close modal-toggle"><i class="icon" data-feather="x"></i><span class="hide-mobile">ESC</span></button>
     <div class="modal-content">
-      <a href="index.html" class="logo"><img src="{{ url_for('static', filename='img/logodo.svg') }}" alt="logo" /></a>
-      <div class="about-font">MEMBERS</div>
+      <button type="button" class="modal-close about-close"><i class="fas fa-times"></i></button>
+      <div class="about-font">About Visual Price Checker</div>
       <div class="about-container">
-        <div class="about-style">
-          <div class="about-font1">ADHINATH</div>
-        </div>
-        <div class="about-style">
-          <div class="about-font1">AMAN</div>
-          <p>Nyan scene anne.</p>
-          <p>Ine poi ethelm mule poi nino</p>
-        </div>
-        <div class="about-style">
-          <div class="about-font1">ARSHAD</div>
-        </div>
-        <div class="about-style">
-          <div class="about-font1">ANUVINDA</div>
-        </div>
+        <p>Visual Price Checker is a smart tool designed to help users find the best deals online.
+          By leveraging advanced image recognition and cloud vision technology, it allows you to compare prices effortlessly and save time.</p>
+        <p>Our mission is to make shopping smarter, easier, and more transparent.
+          We focus on accuracy, efficiency, and simplicity so you can enjoy a hassle-free price comparison experience.</p>
+        <p>This project was built as a mini project to demonstrate the power of modern web technologies
+          like Flask, Dropzone.js, and Cloud Vision API. We aim to continually improve and innovate for a seamless user experience.</p>
+        <p>Thank you for exploring Visual Price Checker.
+          Start uploading images and let us do the legwork for you – compare, save, and shop smart.</p>
       </div>
     </div>
   </div>
+
+  <!-- Main Content -->
   <div class="content">
     <a href="index.html" class="logo"><img src="{{ url_for('static', filename='img/logodo.png') }}" alt="logo" /></a>
     <div class="hero">
@@ -85,111 +139,47 @@
           <b class="is-visible">Helps U Find The Best Deals.&nbsp;</b>
           <b>Find the best deals without the hassle. Let us do the legwork for you.</b>
           <b>Shop smart, save smarter. Start comparing prices today</b>
-          <b>Price check paradise! Unbeatable deals just a click away.</b>
-          <b>Compare, click, Save.. It's that simple.</b>
-          <b>Price savvy? You will be. Start comparing prices now.</b>
-          <b>Don't miss out on savings! Start comparing prices and start saving today.</b>
         </span>
       </h1>
       <button class="button modal-toggle">UPLOAD</button>
+      <a href="#" class="button white about-modal-toggle">About</a>
       <p class="subtitle">Powered By Cloud Vision API <img src="{{ url_for('static', filename='img/logo-google.png') }}" alt="google" /></p>
     </div>
     <div class="screen-wrapper">
       <img src="{{ url_for('static', filename='img/screen.png') }}" class="screen" alt="screen" />
     </div>
-    <section class="section section-features">
-      <h2 class="title">Compare. Save. Enjoy.</h1>
-        <div class="features">
-          <img src="{{ url_for('static', filename='img/overlay-left.svg') }}" class="overlay-left hide-mobile" alt="overlay" />
-          <img src="{{ url_for('static', filename='img/overlay-right.svg') }}" class="overlay-right hide-mobile" alt="overlay" />
-          <img src="{{ url_for('static', filename='img/overlay-top.svg') }}" class="overlay-top show-mobile" alt="overlay" />
-          <img src="{{ url_for('static', filename='img/overlay-bottom.svg') }}" class="overlay-bottom show-mobile" alt="overlay" />
-          <div class="row donts">
-            <div class="feature"><i class="icon" data-feather="check"></i> Efficiency</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Comprehensive</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Accuracy</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Simplicity</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Versatility</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Accessibility</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Reliability</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Innovation</div>
-            <!-- Repeat-->
-            <div class="feature"><i class="icon" data-feather="check"></i> Efficiency</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Comprehensive</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Accuracy</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Simplicity</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Versatility</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Accessibility</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Reliability</div>
-            <div class="feature"><i class="icon" data-feather="check"></i> Innovation</div>
-          </div>
-          <div class="row dos">
-            <div class="feature"><i class="icon" data-feather="check"></i>Shortcuts</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Accessibility</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Dark mode</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Lightning fast</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Beautiful imagery</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Simple UI</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Interactive</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Themes</div>
-            <!-- Repeat-->
-            <div class="feature"><i class="icon" data-feather="check"></i>Shortcuts</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Accessibility</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Dark mode</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Lightning fast</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Beautiful imagery</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Simple UI</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Interactive</div>
-            <div class="feature"><i class="icon" data-feather="check"></i>Themes</div>
-          </div>
-        </div>
-
-        <section class="section cta">
-          <div class="cta-content">
-            <h1 class="title">Visual Price Checker</h1>
-            <!-- Button linked to the "About" modal -->
-            <a href="#" class="button white about-modal-toggle">About</a>
-            <!-- End of buttons -->
-            <p class="subtitle">Thank you for joining us. <img src="{{ url_for('static', filename='img/logo-google.svg') }}" alt="google" /></p>
-          </div>
-          <div class="zero-slider">
-            <div class="slide"><img src="{{ url_for('static', filename='img/screen-cta-2.jpg') }}" alt="inboxzero" /></div>
-          </div>
-        </section>
-        <footer class="footer">
-          <p>&copy; MINI PROJECT</p>
-        </footer>
   </div>
+
   <script src="{{ url_for('static', filename='js/jquery/3.4.1/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/scripts.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
   <script>
     $(document).ready(function () {
-      // Function to toggle modal visibility
+      feather.replace();
+
       function toggleModal(modalClass) {
         $(modalClass).toggleClass('modal-show');
         $('.content').toggleClass('content-blurred');
         $('body').toggleClass('no-scroll');
       }
 
-      // Open & close "About" modal
-      $('.about-modal-toggle').click(function (event) {
+      $('.about-modal-toggle').click(function (e) {
+        e.preventDefault();
         toggleModal('.about-modal');
-        event.preventDefault(); // Prevent default link behavior
       });
-      // Close "About" modal on escape key
-      $(document).keyup(function (e) {
-        if (e.key === "Escape" && $('.about-modal').hasClass('modal-show')) {
-          toggleModal('.about-modal');
-        }
+      $('.about-close').click(function () {
+        toggleModal('.about-modal');
       });
 
-      // Open & close modal
-      $('.modal-toggle').click(function (event) {
+      $('.modal-toggle').click(function (e) {
+        e.preventDefault();
         toggleModal('.upload-modal');
-        event.preventDefault(); // Prevent default link behavior
+      });
+      $('.upload-close').click(function () {
+        toggleModal('.upload-modal');
       });
 
-      // Close modal on escape key press
       $(document).keyup(function (e) {
         if (e.key === "Escape") {
           $('.modal').removeClass('modal-show');
@@ -198,61 +188,25 @@
         }
       });
 
-      // Prevent default form submission for the upload form
-      $('.upload-modal form').submit(function (e) {
-        e.preventDefault();
-        // You can add additional form submission logic here
-        console.log("Upload form submitted!");
+      // Dropzone
+      var myDropzone = new Dropzone("#my-dropzone", {
+        maxFiles: 1,
+        maxFilesize: 5,
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        dictDefaultMessage: "Drag an image here or click to upload",
+        init: function () {
+          this.on("success", function (file, response) {
+            console.log("Upload success:", response);
+            document.getElementById("note").innerText = "✅ Upload completed. Now click Compare Results.";
+          });
+          this.on("error", function (file, errorMessage) {
+            document.getElementById("note").innerText = "❌ Upload failed. Try again.";
+          });
+        }
       });
-
-      // Feather icons
-      feather.replace();
-
-      // Handle click event for upload button
-      $('#upload-button').click(function () {
-        toggleModal('.upload-modal');
-      });
-    });
-
-    $(function () {
-
-      // Provider card slider
-      $('.slider').flickity({
-        pauseAutoPlayOnHover: false,
-        prevNextButtons: false,
-        cellAlign: 'center',
-        draggable: false,
-        freeScroll: false,
-        wrapAround: true,
-        pageDots: false,
-        autoPlay: 3000,
-      });
-
-      // Imbox zero slider
-      $('.zero-slider').flickity({
-        pauseAutoPlayOnHover: false,
-        prevNextButtons: false,
-        cellAlign: 'center',
-        freeScroll: false,
-        wrapAround: false,
-        draggable: false,
-        pageDots: false,
-        autoPlay: 3000,
-        fade: true,
-      });
-
-      // ScrollReveal
-      ScrollReveal().reveal('.hero, .title, .screen, .features, .cards, .zero-slider', {
-        distance: '40px',
-        duration: 2000,
-        mobile: false,
-        reset: false,
-        opacity: 0
-      });
-
     });
   </script>
 
 </body>
-
 </html>
